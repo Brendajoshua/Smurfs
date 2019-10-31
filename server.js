@@ -1,6 +1,8 @@
+require('dotenv').config();
+
 const express = require('express');
 const cors = require('cors');
-const port = 3333;
+const port = process.env.PORT || 3333;
 
 const server = express();
 server.use(express.json());
@@ -20,6 +22,13 @@ let smurfs = [
     id: 0
   }
 ];
+
+server.use(express.static(__dirname + '/smurfs/build'));
+
+server.get('/', (req, res) => {
+  res.sendFile(__dirname + '/client/build/index.html')
+});
+
 server.get('/smurfs', (req, res) => {
   res.json(smurfs);
 });
@@ -81,5 +90,5 @@ server.delete('/smurfs/:id', (req, res) => {
 
 server.listen(port, err => {
   if (err) console.log(err);
-  console.log(`server is listening on port ${port}`);
+  console.log('listening on' + port);
 });
